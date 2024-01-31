@@ -13,8 +13,14 @@ const database = new sqlite3.Database('./dua_main.sqlite');
 app.use(express.json());
 app.use(cors());
 
+// Home
+app.get('/', (req, res)=>{
+    res.send("Dua zone is running...")
+})
+
 
 // API's
+// Category api
 app.get('/api/categories', (req, res)=> {
     database.all('SELECT * FROM category', (err, rows) => {
         if(err){
@@ -24,6 +30,30 @@ app.get('/api/categories', (req, res)=> {
         res.json(rows);
     })
 })
+
+// Sub category api
+app.get('/api/subcategories', (req, res)=>{
+    database.all('SELECT * FROM sub_category', (err, rows) =>{
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json(rows)
+    })
+})
+
+// Dua Api
+app.get('/api/dua', (req, res) => {
+    database.all('SELECT * FROM dua', (err, rows) => {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json(rows)
+    })
+})
+
+
 
 
 app.listen(port, ()=>{
