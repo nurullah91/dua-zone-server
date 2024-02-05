@@ -1,6 +1,6 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const cors = require('cors');
 const app = express();
 
@@ -50,6 +50,24 @@ app.get('/api/dua', (req, res) => {
             return;
         }
         res.json(rows)
+    })
+})
+
+app.get('/api/dua/:categoryId', (req, res)=>{
+    const categoryId = req.params.categoryId;
+
+    database.all('SELECT * FROM dua WHERE cat_id = ?', [categoryId], (err, rows) => {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+
+        if(!rows || rows.length === 0){
+            res.status(404).json({error: 'Dua not found'});
+            return;
+        }
+
+        res.json(rows);
     })
 })
 
